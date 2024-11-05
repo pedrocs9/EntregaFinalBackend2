@@ -1,0 +1,100 @@
+<h1 class="text-center my-4">Productos</h1>
+
+<div class="container mb-4">
+    <form id="filter-form" class="d-flex flex-column flex-md-row justify-content-md-between">
+        <div class="mb-2 mb-md-0">
+            <label for="category-select" class="form-label">Categoria:</label>
+            <select id="category-select" class="form-select">
+                <option value="">Todos</option>
+                <option value="CPU">CPU</option>
+                <option value="GPU">GPU</option>
+                <option value="RAM">RAM</option>
+                <option value="SSD">SSD</option>
+                <option value="MONITOR">MONITOR</option>
+            </select>
+        </div>
+        <div class="mb-2 mb-md-0">
+            <label for="status-select" class="form-label">Disponibilidad:</label>
+            <select id="status-select" class="form-select">
+                <option value="">Todos</option>
+                <option value="true">En Stock</option>
+                <option value="false">Sin Stock</option>
+            </select>
+        </div>
+        <div class="mb-2 mb-md-0">
+            <label for="sort-select" class="form-label">Filtrar por:</label>
+            <select id="sort-select" class="form-select">
+                <option value="">Default</option>
+                <option value="asc">Precio: Bajo a Alto</option>
+                <option value="desc">Precio: Alto a Bajo</option>
+            </select>
+        </div>
+        <div class="mb-2 mb-md-0">
+            <label for="limit-select" class="form-label">Mostrar:</label>
+            <select id="limit-select" class="form-select">
+                <option value="10">10 productos</option>
+                <option value="5">5 productos</option>
+                <option value="20">20 productos</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mt-2 mt-md-0">Aplicar filtros</button>
+        </div>
+    </form>
+</div>
+
+{{#if isValid}}
+    {{#if hasProducts}}
+    <div class="container">
+        <ul id="product-list" class="list-group">
+            {{#each products}}
+            <li class="list-group-item mb-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="{{thumbnails}}" class="img-fluid rounded" alt="{{title}}">
+                    </div>
+                    <div class="col-md-8 d-flex flex-column justify-content-between">
+                        <div>
+                            <h2>{{title}}</h2>
+                            <p>{{description}}</p>
+                            <p class="text-success fw-bold">${{price}}</p>
+                            {{#unless status}}
+                            <p class="text-danger fw-bold">Sin Stock</p>
+                            {{/unless}}
+                        </div>
+                        {{#if status}}
+                        <button class="btn btn-primary mt-3 add-to-cart-button align-self-start" data-pid="{{_id}}">
+                            Agregar a carrito
+                        </button>
+                        {{/if}}
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="d-flex flex-column align-items-center mt-4">
+        <span class="mb-2">Page {{page}} of {{totalPages}}</span>
+        <div>
+            {{#if hasPrevPage}}
+            <a href="{{prevLink}}" class="btn btn-secondary me-2">Anterior</a>
+            {{/if}}
+            {{#if hasNextPage}}
+            <a href="{{nextLink}}" class="btn btn-secondary">Siguiente</a>
+            {{/if}}
+        </div>
+    </div>
+
+    {{else}}
+    <div class="container d-flex flex-column alert alert-warning text-center" style="min-height: 60vh">
+        <h2 class="text-center text-muted my-4">No se encontraron productos</h2>
+        <p>No pudimos encontrar ningún producto que coincida con sus criterios de búsqueda.</p>
+        <p>Intente cambiar los filtros o <a href="/products">mostrar todos los productos</a>.</p>
+    </div>
+    {{/if}}
+{{else}}
+    <div class="container d-flex flex-column alert alert-warning text-center" style="min-height: 60vh">
+        <h2 class="text-center text-muted my-4 alert">Número de página no válido</h2>
+    </div>
+{{/if}}
